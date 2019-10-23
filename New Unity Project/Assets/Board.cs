@@ -13,17 +13,59 @@ public class Board : MonoBehaviour {
 	public Material yellow;
 	public bool throwingBall =false;
 	public sphereColors [,] boardColor;
-	public int maxCollumn=5;
-	public int maxRow= 10;
+	public int maxCollumn=10;
+	public int maxRow= 8;
 	public int boardFill =6;
 	public int score = 0;
 	public int randomPercent = 50;
 	public float time;
+	public List<GameObject> sphereList;
 
 	// to do list
 	// repair the destroy system make shoot
 
+	// spawn一覧
+	public void spawnOne(){
 
+		Vector3 spawnLocation = new Vector3 (-4, 0, 4);
+		Vector3 startLocation = spawnLocation;
+		randomBoard (randomPercent);
+		for(int i=0; i<maxRow;i++)
+		{
+			var go= Instantiate (spherePrefab) as GameObject;
+			go.transform.parent = transform;
+			go.transform.localPosition = spawnLocation;
+			spawnLocation.z = spawnLocation.z -1;
+			sphereList.Add (go);
+			//	Debug.Log (sphereList.Count);
+		}
+	}
+	public void fill(){
+		Vector3 tempPos = new Vector3 (0, 0, 0);
+		foreach (GameObject go in sphereList) 
+		{
+			tempPos = go.transform.localPosition;
+			tempPos.x += 1;
+			go.transform.localPosition = tempPos;
+		}
+	}
+
+	//全スフィア一覧移動
+	public void moveAll()
+	{
+		Vector3 tempPos = new Vector3 (0, 0, 0);
+		foreach (GameObject x in sphereList) 
+		{
+			
+			float temp = x.transform.localPosition.x;
+
+			temp += 1;
+			tempPos.x = temp;
+			tempPos.z = x.transform.localPosition.z;
+			Debug.Log ("x" + tempPos.x + "y" + tempPos.y + "z" + tempPos.z);
+			x.transform.localPosition = tempPos;
+		}
+	}
 	public void setThrowing(bool condition)
 	{
 		throwingBall = condition;
@@ -41,19 +83,20 @@ public class Board : MonoBehaviour {
 		
 		Vector3 spawnLocation = new Vector3 (-4, 0, 4);
 		Vector3 startLocation = spawnLocation;
-		for (int j = 0; j < boardFill; j++) 
+		for (int j = 0; j <boardFill ; j++) 
 		{
-			spawnLocation.z = spawnLocation.z - 1;
-			for(int i=0; i<maxCollumn;i++)
+			spawnLocation.x = spawnLocation.x + 1;
+			for(int i=0; i<maxRow;i++)
 			{
 				var go= Instantiate (spherePrefab) as GameObject;
 				go.transform.parent = transform;
-				go.GetComponent<Sphere> ().Initialize (boardColor[j,i]);
+				go.GetComponent<Sphere> ().Initialize (boardColor[i,j]);
 				go.transform.localPosition = spawnLocation;
-				spawnLocation.x = spawnLocation.x +1;
-
+				spawnLocation.z = spawnLocation.z -1;
+				sphereList.Add (go);
+			//	Debug.Log (sphereList.Count);
 			}
-			spawnLocation.x = startLocation.x;
+			spawnLocation.z = startLocation.z;
 		}
 
 	}
@@ -78,12 +121,12 @@ public class Board : MonoBehaviour {
 				boardColor [currentRow, currentCollumn] = sphereColors.yellow;
 				break;
 			}
-			if (currentCollumn >= (maxCollumn-1)) {
+			if (currentRow >= (maxRow-1)) {
 				i++;
-				currentRow += 1;
-				currentCollumn = 0;
-			} else {
 				currentCollumn += 1;
+				currentRow= 0;
+			} else {
+				currentRow += 1;
 			}
 			// randomPercentによって違う色を作る
 			if (Random.Range (0, 100) <= randomPercent) {
