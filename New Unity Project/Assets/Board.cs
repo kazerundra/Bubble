@@ -20,7 +20,9 @@ public class Board : MonoBehaviour {
 	public int randomPercent = 50;
 	public float time;
 	public List<GameObject> sphereList;
-
+	public int destroyNumber= 0;
+	public int currentWallPosition;
+	public GameObject wall;
 	// to do list
 	// repair the destroy system make shoot
 
@@ -35,11 +37,130 @@ public class Board : MonoBehaviour {
 			var go= Instantiate (spherePrefab) as GameObject;
 			go.transform.parent = transform;
 			go.transform.localPosition = spawnLocation;
+			go.GetComponent<Sphere> ().Initialize (boardColor[i,0]);
 			spawnLocation.z = spawnLocation.z -1;
+			go.GetComponent<Sphere> ().FillEmpty ();
 			sphereList.Add (go);
+
 			//	Debug.Log (sphereList.Count);
 		}
 	}
+	//transform local position をラウンドアップ
+	public int checkDistance(GameObject go)
+	{
+		Vector3 temppos = go.transform.localPosition;
+		return Mathf.RoundToInt (temppos.x);
+	}
+	public void checkMoveable(){
+		StartCoroutine (checkMoveAll());
+	}
+	//COllumnに分けてスフィアを行ずつに動かす
+	IEnumerator checkMoveAll()
+	{
+
+		List<GameObject> sphereList1 = new List<GameObject>();
+		List<GameObject> sphereList2= new List<GameObject>();
+		List<GameObject> sphereList3= new List<GameObject>();
+		List<GameObject> sphereList4= new List<GameObject>();
+		List<GameObject> sphereList5= new List<GameObject>();
+		List<GameObject> sphereList6= new List<GameObject>();
+		List<GameObject> sphereList7= new List<GameObject>();
+		List<GameObject> sphereList8= new List<GameObject>();
+		List<GameObject> sphereList9= new List<GameObject>();
+		List<GameObject> sphereList10= new List<GameObject>();
+		//距離によってリストに入れる
+		foreach (GameObject go in sphereList) 
+		{
+			switch (checkDistance (go)) 
+			{
+			case -3:
+				sphereList10.Add (go);
+				break;
+			case -2:
+				sphereList9.Add (go);
+				break;
+			case -1:
+				sphereList8.Add (go);
+				break;
+			case 0:
+				sphereList7.Add (go);
+				break;
+			case 1:
+				sphereList6.Add (go);
+				break;
+			case 2:
+				sphereList5.Add (go);
+				break;
+			case 3:
+				sphereList4.Add (go);
+				break;
+			case 4:
+				sphereList3.Add (go);
+				break;
+			case 5:
+				sphereList2.Add (go);
+				break;
+			case 6:
+				sphereList1.Add (go);
+				break;
+			default:
+				sphereList10.Add (go);
+				break;
+			}
+		}
+		List<GameObject> tempList;
+		//動かす
+		for (int i = 0; i <= 10; i++) 
+		{
+			if (i == 0) {
+				tempList = sphereList1;
+			} else if (i == 1) 
+			{
+				tempList = sphereList2;
+			}else if (i == 2) 
+			{
+				tempList = sphereList3;
+			}else if (i == 3) 
+			{
+				tempList = sphereList4;
+			}else if (i == 4) 
+			{
+				tempList = sphereList5;
+			}else if (i == 5) 
+			{
+				tempList = sphereList6;
+			}else if (i == 6) 
+			{
+				tempList = sphereList7;
+			}else if (i == 7) 
+			{
+				tempList = sphereList8;
+			}else if (i == 8) 
+			{
+				tempList = sphereList9;
+			}else  
+			{
+				tempList = sphereList10;
+			}
+
+			foreach (GameObject go in tempList) 
+			{
+				if (go != null) {
+					go.GetComponent<Sphere> ().moving = true;
+				}
+			}
+			yield return new WaitForSeconds(0.05f);
+			
+		} 
+	}
+	//壁の位置を設置
+	public void setWall(float position)
+	{
+		Vector3 tempPos = wall.transform.localPosition;
+		tempPos.x = position-4;
+		wall.transform.localPosition = tempPos;
+	}
+	//全スフィアを右に動かす
 	public void fill(){
 		Vector3 tempPos = new Vector3 (0, 0, 0);
 		foreach (GameObject go in sphereList) 
@@ -48,6 +169,9 @@ public class Board : MonoBehaviour {
 			tempPos.x += 1;
 			go.transform.localPosition = tempPos;
 		}
+
+		currentWallPosition += 1;
+		setWall (currentWallPosition);
 	}
 
 	//全スフィア一覧移動
@@ -98,6 +222,8 @@ public class Board : MonoBehaviour {
 			}
 			spawnLocation.z = startLocation.z;
 		}
+		setWall (boardFill);
+		currentWallPosition = boardFill;
 
 	}
 	//ランダムステージを作る

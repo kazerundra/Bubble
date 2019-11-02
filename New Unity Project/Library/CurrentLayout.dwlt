@@ -20,7 +20,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 2}
-  m_MinSize: {x: 950, y: 300}
+  m_MinSize: {x: 950, y: 492}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -108,7 +108,7 @@ MonoBehaviour:
   m_MinSize: {x: 913, y: 442}
   m_MaxSize: {x: 22008, y: 10021}
   vertical: 1
-  controlID: 23
+  controlID: 75
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -134,7 +134,7 @@ MonoBehaviour:
   m_MinSize: {x: 913, y: 442}
   m_MaxSize: {x: 22008, y: 10021}
   vertical: 0
-  controlID: 24
+  controlID: 76
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -342,7 +342,7 @@ MonoBehaviour:
       y: 17
       width: 649
       height: 269
-    m_Scale: {x: 1.0609, y: 1.0609}
+    m_Scale: {x: 1.0608999, y: 1.0609}
     m_Translation: {x: 324.5, y: 134.5}
     m_MarginLeft: 0
     m_MarginRight: 0
@@ -350,9 +350,9 @@ MonoBehaviour:
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -305.87238
+      x: -305.8724
       y: -126.77915
-      width: 611.74475
+      width: 611.7448
       height: 253.5583
     m_MinimalGUI: 1
   m_defaultScale: 1
@@ -389,14 +389,14 @@ MonoBehaviour:
     width: 649
     height: 307
   m_SceneLighting: 1
-  lastFramingTime: 6270.05677584085
+  lastFramingTime: 2012.5260663
   m_2DMode: 1
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 351, y: 94.5, z: 0}
+    m_Target: {x: -0.61739373, y: 0.9299998, z: 0}
     speed: 2
-    m_Value: {x: 351, y: 94.5, z: 0}
+    m_Value: {x: -0.61739373, y: 0.9299998, z: 0}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -423,9 +423,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 219.41899
+    m_Target: 16.666874
     speed: 2
-    m_Value: 219.41899
+    m_Value: 16.666874
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -533,9 +533,9 @@ MonoBehaviour:
     height: 614
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: a07bffff
-    m_LastClickedID: -33888
-    m_ExpandedIDs: a07bffffe6fbffff000000005a250000
+    m_SelectedIDs: 
+    m_LastClickedID: 0
+    m_ExpandedIDs: e6fbffff00000000842500008e250000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

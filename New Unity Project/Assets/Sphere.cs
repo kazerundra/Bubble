@@ -9,26 +9,70 @@ public class Sphere : MonoBehaviour {
 	public Material sMaterial;
 	public bool destroy=false;
 	public bool destroyCheck = false;
+	public bool moving = false;
+	public GameObject brd;
+	public Board board;
+	public GameObject sphereInfront;
 	//同じ色範囲に入るとリストに入れて一緒に消すことできるように
 
 	private bool DistanceCheck(Transform a, Transform b)
 	{
 		
-		return Vector3.Distance (a.position, b.position) <= 1.1;
+		return Vector3.Distance (a.position, b.position) <= 1.05;
+	}
+	private void OnTriggerStay(Collider other)
+	{
+		if (other.tag == "Sphere") {
+
+			if (moving) {
+				if ( (other.gameObject.transform.localPosition.z -transform.localPosition.z) <=0.3&&(other.gameObject.transform.localPosition.z -transform.localPosition.z) >=-0.3) 
+				{
+					if (other.gameObject.transform.localPosition.x > transform.localPosition.x) {
+						if (DistanceCheck (transform, other.transform)) {
+							moving = false;		
+							sphereInfront = other.gameObject;
+						} 
+					} 
+				}
+			}
+			
+		}else if(other.tag == "Wall")
+		{
+			if (moving) {
+				if (other.gameObject.transform.localPosition.x <= transform.localPosition.x) 
+				{
+					moving = false;
+				}
+			}
+		}
+
 	}
 	private void OnTriggerEnter(Collider other)
 	{
 		if (other.tag == "Sphere") 
 		{
-			if (sColor == other.gameObject.GetComponent<Sphere> ().sColor) 
-			{
-				if (DistanceCheck(transform,other.gameObject.transform)) 
+			if (moving) {
+				if (other.gameObject.transform.localPosition.z == transform.localPosition.z) 
 				{
-					sameColor.Add (other.gameObject);
+					
+				}
+			} else 
+			{
+				if (sColor == other.gameObject.GetComponent<Sphere> ().sColor) 
+				{
+					if (other.gameObject.GetComponent<Sphere> ().moving == false) 
+					{
+						if (DistanceCheck(transform,other.gameObject.transform)) 
+						{
+							sameColor.Add (other.gameObject);
+						}
+					}
 				}
 			}
-
-		}
+		} 	}
+	//右に移動他のスフィアとぶつかるまで
+	public void FillEmpty(){
+		moving = true;
 	}
 	//GAMEOBJECTのマテリアルを変更
 	public void Initialize(sphereColors clr)
@@ -65,6 +109,8 @@ public class Sphere : MonoBehaviour {
 	void Start () {
 		sMaterial = GetComponent<MeshRenderer>().material;
 		currentColor = sColor;
+		brd=GameObject.Find ("Plane");
+		board = brd.GetComponent<Board> ();
 
 	}
 	//リストに入れる
@@ -96,10 +142,17 @@ public class Sphere : MonoBehaviour {
 		// アニメーションここ
 		foreach (GameObject x in sameColor) 
 		{
-			Destroy (x);
+			DestroySphere (x);
 		}
 
-		Destroy (gameObject);
+		DestroySphere (gameObject);
+	}
+	public void DestroySphere(GameObject x)
+	{
+		board.sphereList.Remove (x);
+		board.destroyNumber += 1;
+//		Debug.Log (board.destroyNumber);
+		Destroy (x);
 	}
 	
 	// Update is called once per frame
@@ -112,6 +165,10 @@ public class Sphere : MonoBehaviour {
 		if (destroy  && !destroyCheck) {
 			destroyCheck = true;
 			DestroyAll ();
+		}
+		if (moving) 
+		{
+			transform.Translate (Vector3.right *( Time.deltaTime * 2));
 		}
 	}
 }

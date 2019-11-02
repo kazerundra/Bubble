@@ -5,6 +5,7 @@ using UnityEngine;
 public class Ball : MonoBehaviour {
 
 	public sphereColors colors;
+	public Board board;
 
 	private void OnTriggerEnter(Collider other)
 	{
@@ -14,14 +15,16 @@ public class Ball : MonoBehaviour {
 				other.gameObject.GetComponent<Sphere> ().destroy = true;
 			} else 
 			{
-				Destroy (other.gameObject);
+				other.gameObject.GetComponent<Sphere>().DestroySphere(other.gameObject);
 			}
-
+			//破壊した後空いたところの確認
+			board.GetComponent<Board> ().checkMoveable ();
 		}
 	}
 	// Use this for initialization
 	void Start () {
-		
+		GameObject plane = GameObject.Find ("Plane");
+		board = plane.GetComponent<Board> ();
 	}
 	
 	// Update is called once per frame
