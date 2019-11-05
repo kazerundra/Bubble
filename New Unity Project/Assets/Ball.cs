@@ -6,19 +6,35 @@ public class Ball : MonoBehaviour {
 
 	public sphereColors colors;
 	public Board board;
+	public bool touch = false;
+	public bool shoot = false;
+	public Vector3 moveTarget;
+	public float speed = 20.0f;
+
+	public void moveToward(Vector3 pos)
+	{
+		moveTarget = (pos- transform.position).normalized;
+		shoot = true;	
+		Debug.Log ("shoot");
+	}
 
 	private void OnTriggerEnter(Collider other)
 	{
 		if (other.tag == "Sphere") 
 		{
-			if (colors == other.gameObject.GetComponent<Sphere> ().sColor) {
-				other.gameObject.GetComponent<Sphere> ().destroy = true;
-			} else 
+			if (!touch) 
 			{
-				other.gameObject.GetComponent<Sphere>().DestroySphere(other.gameObject);
+				if (colors == other.gameObject.GetComponent<Sphere> ().sColor) {
+					other.gameObject.GetComponent<Sphere> ().destroy = true;
+				} else 
+				{
+					other.gameObject.GetComponent<Sphere>().DestroySphere(other.gameObject);
+				}
+				//破壊した後空いたところの確認
+				board.GetComponent<Board> ().checkMoveable ();
+				touch = true;
+
 			}
-			//破壊した後空いたところの確認
-			board.GetComponent<Board> ().checkMoveable ();
 		}
 	}
 	// Use this for initialization
@@ -29,6 +45,11 @@ public class Ball : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (shoot) 
+		{
+			//transform.position = Vector3.MoveTowards (transform.position, moveTarget, Time.deltaTime * speed);
+			transform.position += moveTarget *speed * Time.deltaTime;
+		}
 		
 	}
 }

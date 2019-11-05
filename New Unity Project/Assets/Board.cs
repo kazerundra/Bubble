@@ -23,6 +23,8 @@ public class Board : MonoBehaviour {
 	public int destroyNumber= 0;
 	public int currentWallPosition;
 	public GameObject wall;
+	public bool shooting= true;
+	public GameObject currentBall;
 	// to do list
 	// repair the destroy system make shoot
 
@@ -275,6 +277,20 @@ public class Board : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (shooting) 
+		{
+			if (Input.GetMouseButtonDown (0)) 
+			{
+				RaycastHit hit;
+				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+				if (Physics.Raycast (ray, out hit)) 
+				{
+					Vector3 x = hit.point;
+					x.z = 0;
+					currentBall.GetComponent<Ball> ().moveToward (x);
+				}
+			}
+		}
 		
 	}
 }
