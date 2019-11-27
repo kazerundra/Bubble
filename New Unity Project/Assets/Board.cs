@@ -25,6 +25,14 @@ public class Board : MonoBehaviour {
 	public GameObject wall;
 	public bool shooting= true;
 	public GameObject currentBall;
+	public GameObject nextBall;
+	public GameObject ballSpawnLocation;
+	public GameObject nextBallLocation;
+	public bool startGame =false;
+	public GameObject ballPrefab;
+	private float timer = 0f;
+	private float reinforcementTimer = 0f;
+	public float reinforcement =10f;
 	// to do list
 	// repair the destroy system make shoot
 
@@ -56,6 +64,7 @@ public class Board : MonoBehaviour {
 	public void checkMoveable(){
 		StartCoroutine (checkMoveAll());
 	}
+
 	//COllumnに分けてスフィアを行ずつに動かす
 	IEnumerator checkMoveAll()
 	{
@@ -182,9 +191,7 @@ public class Board : MonoBehaviour {
 		Vector3 tempPos = new Vector3 (0, 0, 0);
 		foreach (GameObject x in sphereList) 
 		{
-			
 			float temp = x.transform.localPosition.x;
-
 			temp += 1;
 			tempPos.x = temp;
 			tempPos.z = x.transform.localPosition.z;
@@ -202,6 +209,25 @@ public class Board : MonoBehaviour {
 		boardColor = new sphereColors[row,collumn];
 		randomBoard (percent);
 		spawnStage ();
+	}
+	public void spawnBall()
+	{
+		if (!startGame) {
+			GameObject go = Instantiate (ballPrefab) as GameObject;
+			go.transform.position = ballSpawnLocation.transform.position;
+			startGame = true;
+			go.transform.parent = transform;
+			currentBall = go;
+			currentBall.GetComponent<Ball> ().randomColor ();
+		} else {
+			currentBall = nextBall;
+			currentBall.transform.position = ballSpawnLocation.transform.position;
+		}
+		GameObject go1 = Instantiate (ballPrefab) as GameObject;
+		go1.transform.position = nextBallLocation.transform.position;
+		go1.transform.parent = transform;
+		nextBall = go1;
+		nextBall.GetComponent<Ball> ().randomColor ();
 	}
 	//ボードにSpawn
 	public void spawnStage()
@@ -272,24 +298,40 @@ public class Board : MonoBehaviour {
 		
 	void Start () {
 		initializeBoard (maxRow, maxCollumn ,randomPercent);
+		spawnBall ();
 		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (shooting) 
-		{
-			if (Input.GetMouseButtonDown (0)) 
-			{
+		reinforcementTimer += Time.deltaTime;
+		if (reinforcementTimer >= reinforcement) {
+			reinforcementTimer = 0;
+			spawnOne ();
+		}
+		if (shooting) {
+			timer = 0f;
+			if (Input.GetMouseButtonDown (0)) {
 				RaycastHit hit;
 				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-				if (Physics.Raycast (ray, out hit)) 
-				{
+				if (Physics.Raycast (ray, out hit)) {
 					Vector3 x = hit.point;
 					x.z = 0;
 					currentBall.GetComponent<Ball> ().moveToward (x);
 				}
+				shooting = false;
 			}
+			if (Input.GetKeyUp ("space")) {
+				spawnBall ();
+			}
+		} else {
+			
+			timer += Time.deltaTime;
+			if (timer >= 2) {
+				shooting = true;
+				spawnBall ();
+			}
+
 		}
 		
 	}

@@ -16,23 +16,38 @@ public class Sphere : MonoBehaviour {
 	//同じ色範囲に入るとリストに入れて一緒に消すことできるように
 
 	private bool DistanceCheck(Transform a, Transform b)
+	{		
+		return Vector3.Distance (a.position, b.position) <= 1.03;
+	}
+	private void Rounding ()
 	{
-		
-		return Vector3.Distance (a.position, b.position) <= 1.05;
+		Vector3 tmp = transform.localPosition;
+		tmp.x = Mathf.Round (tmp.x);
+		tmp.z = Mathf.Round (tmp.z);
+		transform.localPosition = tmp;
 	}
 	private void OnTriggerStay(Collider other)
 	{
 		if (other.tag == "Sphere") {
 
 			if (moving) {
-				if ( (other.gameObject.transform.localPosition.z -transform.localPosition.z) <=0.3&&(other.gameObject.transform.localPosition.z -transform.localPosition.z) >=-0.3) 
-				{
+				sameColor.Clear ();
+				if ((other.gameObject.transform.localPosition.z - transform.localPosition.z) <= 0.3 && (other.gameObject.transform.localPosition.z - transform.localPosition.z) >= -0.3) {
 					if (other.gameObject.transform.localPosition.x > transform.localPosition.x) {
 						if (DistanceCheck (transform, other.transform)) {
 							moving = false;		
 							sphereInfront = other.gameObject;
+							Rounding();
 						} 
 					} 
+				}
+			} else {
+				if (!sameColor.Contains (other.gameObject) && other.gameObject.GetComponent<Sphere>().sColor == sColor) {
+					if (DistanceCheck (other.transform, transform)) {
+						if (other.transform.localPosition.z == transform.localPosition.z || other.transform.localPosition.x == transform.localPosition.x) {
+							sameColor.Add (other.gameObject);
+						}
+					}
 				}
 			}
 			
@@ -42,6 +57,7 @@ public class Sphere : MonoBehaviour {
 				if (other.gameObject.transform.localPosition.x <= transform.localPosition.x) 
 				{
 					moving = false;
+					Rounding ();
 				}
 			}
 		}
@@ -64,7 +80,7 @@ public class Sphere : MonoBehaviour {
 					{
 						if (DistanceCheck(transform,other.gameObject.transform)) 
 						{
-							sameColor.Add (other.gameObject);
+							//sameColor.Add (other.gameObject);
 						}
 					}
 				}
@@ -119,15 +135,22 @@ public class Sphere : MonoBehaviour {
 		bool retry;
 		restart:
 		retry = false;
-		foreach (GameObject x in target.GetComponent<Sphere>().sameColor) 
-		{
-			x.GetComponent<Sphere> ().destroy = true;
-			if (!sameColor.Contains (x)&& x != gameObject) 
+		if (sameColor.Count != 0) {
+			foreach (GameObject x in target.GetComponent<Sphere>().sameColor) 
 			{
-				sameColor.Add (x);
-				retry = true;
+				if (x != null) 
+				{
+					x.GetComponent<Sphere> ().destroy = true;
+					if (!sameColor.Contains (x)&& x != gameObject) 
+					{
+						sameColor.Add (x);
+						retry = true;
+					}
+				}
+			
 			}
 		}
+	
 		if (retry) {
 			goto restart;
 		}

@@ -9,13 +9,35 @@ public class Ball : MonoBehaviour {
 	public bool touch = false;
 	public bool shoot = false;
 	public Vector3 moveTarget;
+	public Material sMaterial;
 	public float speed = 20.0f;
 
+	/// <summary>
+	/// 方向に飛ぶ
+	/// </summary>
+	/// <param name="pos">Position.</param>
 	public void moveToward(Vector3 pos)
 	{
 		moveTarget = (pos- transform.position).normalized;
 		shoot = true;	
 		Debug.Log ("shoot");
+	}
+	/// <summary>
+	/// 色をランダムにする
+	/// </summary>
+	public void randomColor(){
+		int random = Random.Range (0, 3);
+		if (random == 0) {
+			colors = sphereColors.red;
+			sMaterial = GetComponentInParent<Board> ().red;
+		} else if (random == 1) {
+			colors = sphereColors.blue;
+			sMaterial = GetComponentInParent<Board> ().blue;
+		} else  {
+			colors = sphereColors.yellow;
+			sMaterial = GetComponentInParent<Board> ().yellow;
+		} 
+		GetComponent<MeshRenderer> ().material = sMaterial;
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -33,6 +55,7 @@ public class Ball : MonoBehaviour {
 				//破壊した後空いたところの確認
 				board.GetComponent<Board> ().checkMoveable ();
 				touch = true;
+				Destroy (gameObject);
 
 			}
 		}
