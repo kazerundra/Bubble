@@ -33,6 +33,11 @@ public class Board : MonoBehaviour {
 	private float timer = 0f;
 	private float reinforcementTimer = 0f;
 	public float reinforcement =10f;
+
+
+	public Sprite Banana;
+	public Sprite Corn;
+	public Sprite Carrot;
 	// to do list
 	// repair the destroy system make shoot
 
@@ -219,6 +224,7 @@ public class Board : MonoBehaviour {
 			go.transform.parent = transform;
 			currentBall = go;
 			currentBall.GetComponent<Ball> ().randomColor ();
+			currentBall.transform.rotation = Quaternion.identity;
 		} else {
 			currentBall = nextBall;
 			currentBall.transform.position = ballSpawnLocation.transform.position;
@@ -227,6 +233,7 @@ public class Board : MonoBehaviour {
 		go1.transform.position = nextBallLocation.transform.position;
 		go1.transform.parent = transform;
 		nextBall = go1;
+		nextBall.transform.rotation = Quaternion.identity;
 		nextBall.GetComponent<Ball> ().randomColor ();
 	}
 	//ボードにSpawn

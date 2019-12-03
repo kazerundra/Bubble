@@ -11,6 +11,26 @@ public class Ball : MonoBehaviour {
 	public Vector3 moveTarget;
 	public Material sMaterial;
 	public float speed = 20.0f;
+	public GameObject img;
+	public Sprite Banana;
+	public Sprite Corn;
+	public Sprite Carrot;
+
+	/// <summary>
+	/// Changes the images. red= carrot, yellow banana, blue corn
+	/// </summary>
+	public void changeImages(){
+		if (colors == sphereColors.red) {
+			img.GetComponent<SpriteRenderer> ().sprite = Carrot;
+		} else if(colors == sphereColors.yellow) {
+			img.GetComponent<SpriteRenderer> ().sprite = Banana;
+		} else if(colors == sphereColors.blue) {
+			img.GetComponent<SpriteRenderer> ().sprite = Corn;
+		} else {
+			img.GetComponent<SpriteRenderer> ().sprite = Banana;
+		} 
+
+	}
 
 	/// <summary>
 	/// 方向に飛ぶ
@@ -38,6 +58,7 @@ public class Ball : MonoBehaviour {
 			sMaterial = GetComponentInParent<Board> ().yellow;
 		} 
 		GetComponent<MeshRenderer> ().material = sMaterial;
+		changeImages ();
 	}
 
 	private void OnTriggerEnter(Collider other)
