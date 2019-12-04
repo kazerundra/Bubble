@@ -13,7 +13,22 @@ public class Sphere : MonoBehaviour {
 	public GameObject brd;
 	public Board board;
 	public GameObject sphereInfront;
+	public Sprite Monkey, Rabbit, Chicken;
+	public GameObject img;
 	//同じ色範囲に入るとリストに入れて一緒に消すことできるように
+
+	public void changeImages(){
+		if (sColor == sphereColors.red) {
+			img.GetComponent<SpriteRenderer> ().sprite = Rabbit;
+		} else if(sColor == sphereColors.yellow) {
+			img.GetComponent<SpriteRenderer> ().sprite = Monkey;
+		} else if(sColor == sphereColors.blue) {
+			img.GetComponent<SpriteRenderer> ().sprite = Chicken;
+		} else {
+			img.GetComponent<SpriteRenderer> ().sprite = Monkey;
+		} 
+
+	}
 
 	private bool DistanceCheck(Transform a, Transform b)
 	{		
@@ -117,7 +132,7 @@ public class Sphere : MonoBehaviour {
 			break;			
 		}
 		GetComponent<MeshRenderer> ().material = sMaterial;
-		
+		changeImages ();
 	}
 
 
