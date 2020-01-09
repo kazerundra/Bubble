@@ -69,6 +69,7 @@ public class Sphere : MonoBehaviour {
 		}else if(other.tag == "Wall")
 		{
 			if (moving) {
+
 				if (other.gameObject.transform.localPosition.x <= transform.localPosition.x) 
 				{
 					moving = false;
@@ -207,6 +208,9 @@ public class Sphere : MonoBehaviour {
 		if (moving) 
 		{
 			transform.Translate (Vector3.right *( Time.deltaTime * 2));
+			if (!board.GetComponent<Board> ().canShoot) {
+				board.GetComponent<Board> ().timer= 0f;
+			}
 		}
 	}
 }

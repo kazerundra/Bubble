@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\BackWall.cs" />
      <Compile Include="Assets\Ball.cs" />
      <Compile Include="Assets\Board.cs" />
      <Compile Include="Assets\Sphere.cs" />

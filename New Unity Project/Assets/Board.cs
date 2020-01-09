@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum sphereColors {red,blue,yellow,green,none};
+public enum gameMode {puzzle,infinite};
 
 public class Board : MonoBehaviour {
 	
@@ -23,16 +24,19 @@ public class Board : MonoBehaviour {
 	public int destroyNumber= 0;
 	public int currentWallPosition;
 	public GameObject wall;
-	public bool shooting= true;
+	public bool canShoot= true;
 	public GameObject currentBall;
 	public GameObject nextBall;
 	public GameObject ballSpawnLocation;
 	public GameObject nextBallLocation;
+	public GameObject backWall;
 	public bool startGame =false;
 	public GameObject ballPrefab;
-	private float timer = 0f;
+	public float timer = 0f;
 	private float reinforcementTimer = 0f;
 	public float reinforcement =10f;
+	gameMode gMode = gameMode.infinite;
+
 
 
 	public Sprite Banana;
@@ -47,6 +51,10 @@ public class Board : MonoBehaviour {
 		Vector3 spawnLocation = new Vector3 (-4, 0, 4);
 		Vector3 startLocation = spawnLocation;
 		randomBoard (randomPercent);
+		if (backWall.GetComponent<BackWall>().isBackwallGotSphere) {
+			fill ();
+			//moveAll ();
+		}
 		for(int i=0; i<maxRow;i++)
 		{
 			var go= Instantiate (spherePrefab) as GameObject;
@@ -59,6 +67,7 @@ public class Board : MonoBehaviour {
 
 			//	Debug.Log (sphereList.Count);
 		}
+
 	}
 	//transform local position をラウンドアップ
 	public int checkDistance(GameObject go)
@@ -67,6 +76,7 @@ public class Board : MonoBehaviour {
 		return Mathf.RoundToInt (temppos.x);
 	}
 	public void checkMoveable(){
+		timer = 0;
 		StartCoroutine (checkMoveAll());
 	}
 
@@ -215,8 +225,10 @@ public class Board : MonoBehaviour {
 		randomBoard (percent);
 		spawnStage ();
 	}
+	//次のボールを作る
 	public void spawnBall()
 	{
+		timer = 0;
 		if (!startGame) {
 			GameObject go = Instantiate (ballPrefab) as GameObject;
 			go.transform.position = ballSpawnLocation.transform.position;
@@ -311,12 +323,8 @@ public class Board : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		reinforcementTimer += Time.deltaTime;
-		if (reinforcementTimer >= reinforcement) {
-			reinforcementTimer = 0;
-			spawnOne ();
-		}
-		if (shooting) {
+		Debug.Log (timer);
+		if (canShoot) {
 			timer = 0f;
 			if (Input.GetMouseButtonDown (0)) {
 				RaycastHit hit;
@@ -325,18 +333,26 @@ public class Board : MonoBehaviour {
 					Vector3 x = hit.point;
 					x.z = 0;
 					currentBall.GetComponent<Ball> ().moveToward (x);
+					canShoot = false;
+					reinforcementTimer += 2;
 				}
-				shooting = false;
-			}
-			if (Input.GetKeyUp ("space")) {
-				spawnBall ();
+
 			}
 		} else {
 			
 			timer += Time.deltaTime;
-			if (timer >= 2) {
-				shooting = true;
-				spawnBall ();
+			if (timer >= 0.5f) 
+			{
+				if (reinforcementTimer >= reinforcement) {
+					reinforcementTimer = 0;
+					spawnOne ();
+
+				} else {
+					canShoot = true;
+					spawnBall ();
+
+				}
+
 			}
 
 		}
