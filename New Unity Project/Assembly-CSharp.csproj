@@ -46,8 +46,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\AudioManager.cs" />
      <Compile Include="Assets\Ball.cs" />
      <Compile Include="Assets\Board.cs" />
+     <Compile Include="Assets\LevelSelect.cs" />
+     <Compile Include="Assets\MainMenu.cs" />
+     <Compile Include="Assets\SceneFader.cs" />
      <Compile Include="Assets\Sphere.cs" />
      <Compile Include="Assets\SphereCollider.cs" />
  <Reference Include="UnityEngine.UI">
