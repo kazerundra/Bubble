@@ -2,13 +2,16 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Board.cs">
     <Files>
-      <File FileName="Assets\Board.cs" Line="325" Column="18" />
-      <File FileName="Assets\Sphere.cs" Line="33" Column="16" />
-      <File FileName="Assets\Ball.cs" Line="39" Column="5" />
+      <File FileName="Assets\Board.cs" Line="79" Column="13" />
+      <File FileName="Assets\Sphere.cs" Line="199" Column="3" />
+      <File FileName="Assets\Ball.cs" Line="77" Column="51" />
+      <File FileName="Assets\BackWall.cs" Line="22" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="C:\Users\Rundra\Documents\GameExeFile\Buble\New Unity Project\Assets\Ball.cs" line="61" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
