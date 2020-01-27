@@ -46,11 +46,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
      <Compile Include="Assets\AudioManager.cs" />
-=======
      <Compile Include="Assets\BackWall.cs" />
->>>>>>> 266919e031dc13df733785aa30979098a424dda1
      <Compile Include="Assets\Ball.cs" />
      <Compile Include="Assets\Board.cs" />
      <Compile Include="Assets\LevelSelect.cs" />
