@@ -141,7 +141,7 @@ public class Sphere : MonoBehaviour {
 	void Start () {
 		sMaterial = GetComponent<MeshRenderer>().material;
 		currentColor = sColor;
-		brd=GameObject.Find ("Bg1");
+		brd=GameObject.Find ("Plane");
 		board = brd.GetComponent<Board> ();
 
 	}

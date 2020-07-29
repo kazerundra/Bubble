@@ -47,20 +47,28 @@ public class Ball : MonoBehaviour {
 	/// </summary>
 	public void randomColor(){
 		int random = Random.Range (0, 3);
-		if (random == 0) {
-			colors = sphereColors.red;
-			sMaterial = GetComponentInParent<Board> ().red;
-		} else if (random == 1) {
-			colors = sphereColors.blue;
-			sMaterial = GetComponentInParent<Board> ().blue;
-		} else  {
-			colors = sphereColors.yellow;
-			sMaterial = GetComponentInParent<Board> ().yellow;
-		} 
-		GetComponent<MeshRenderer> ().material = sMaterial;
-		changeImages ();
+        changeColor(random);
 	}
-
+    public void changeColor(int number)
+    {
+        if (number == 0)
+        {
+            colors = sphereColors.red;
+            sMaterial = GetComponentInParent<Board>().red;
+        }
+        else if (number == 1)
+        {
+            colors = sphereColors.blue;
+            sMaterial = GetComponentInParent<Board>().blue;
+        }
+        else
+        {
+            colors = sphereColors.yellow;
+            sMaterial = GetComponentInParent<Board>().yellow;
+        }
+        GetComponent<MeshRenderer>().material = sMaterial;
+        changeImages();
+    }
 	private void OnTriggerEnter(Collider other)
 	{
 		if (other.tag == "Sphere") 
@@ -92,7 +100,7 @@ public class Ball : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
-		GameObject plane = GameObject.Find ("Bg1");
+		GameObject plane = GameObject.Find ("Plane");
 		board = plane.GetComponent<Board> ();
 	}
 	
