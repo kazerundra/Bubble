@@ -49,6 +49,11 @@ public class Ball : MonoBehaviour {
 		int random = Random.Range (0, 3);
         changeColor(random);
 	}
+
+    /// <summary>
+    /// カラーチェンジ
+    /// </summary>
+    /// <param name="number">0.carrot,1.corn,2.Banana,</param>
     public void changeColor(int number)
     {
         if (number == 0)
@@ -93,7 +98,7 @@ public class Ball : MonoBehaviour {
             if (!touch)
             {
                 touch = true;
-                board.TrashScore(true);
+                board.TrashScore(false);
                 Destroy(gameObject);
             }
         }

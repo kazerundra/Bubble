@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum sphereColors {red,blue,yellow,green,none};
 public enum gameMode {puzzle,infinite};
@@ -8,6 +9,7 @@ public enum gameMode {puzzle,infinite};
 public class Board : MonoBehaviour {
 	
 	public GameObject spherePrefab;
+    public sphereColors currentTemp;
 	public Material red;
 	public Material blue;
 	public Material green;
@@ -36,6 +38,7 @@ public class Board : MonoBehaviour {
 	private float reinforcementTimer = 0f;
 	public float reinforcement =10f;
 	gameMode gMode = gameMode.infinite;
+    public Text scoreText;
 
 
 
@@ -79,9 +82,39 @@ public class Board : MonoBehaviour {
 		timer = 0;
 		StartCoroutine (checkMoveAll());
 	}
+    public void changeBall() {
+        currentTemp = currentBall.GetComponent<Ball>().colors;
+        currentBall.GetComponent<Ball>().colors = nextBall.GetComponent<Ball>().colors;
+        nextBall.GetComponent<Ball>().colors = currentTemp;
+        ballCheck(nextBall);
+        ballCheck(currentBall);
+    }
+    public void changeScore() {
+        scoreText.text = "Score : " + score.ToString();
+    }
 
-	//COllumnに分けてスフィアを行ずつに動かす
-	IEnumerator checkMoveAll()
+    public void ballCheck(GameObject go)
+    {
+        if (go.GetComponent<Ball>().colors == sphereColors.red)
+        {
+            go.GetComponent<Ball>().changeColor(0);
+        }
+        else if (go.GetComponent<Ball>().colors == sphereColors.blue)
+        {
+            go.GetComponent<Ball>().changeColor(1);
+        }
+        else if (go.GetComponent<Ball>().colors == sphereColors.yellow)
+        {
+            go.GetComponent<Ball>().changeColor(2);
+        }
+        else {
+            go.GetComponent<Ball>().changeColor(3);
+        }
+
+    }
+
+    //COllumnに分けてスフィアを行ずつに動かす
+    IEnumerator checkMoveAll()
 	{
 
 		List<GameObject> sphereList1 = new List<GameObject>();
@@ -328,6 +361,7 @@ public class Board : MonoBehaviour {
         {
             score -= 10;
         }
+        changeScore();
     }
 	
 	// Update is called once per frame
@@ -347,6 +381,10 @@ public class Board : MonoBehaviour {
 				}
 
 			}
+            if (Input.GetMouseButtonDown(1))
+            {
+                changeBall();
+            }
 		} else {
 			
 			timer += Time.deltaTime;
