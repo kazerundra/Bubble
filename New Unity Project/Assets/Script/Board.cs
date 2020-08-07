@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum sphereColors {red,blue,yellow,green,none};
+public enum sphereColors {red,blue,yellow,green,none,chocolate};
 public enum gameMode {puzzle,infinite};
 
 public class Board : MonoBehaviour {
@@ -38,13 +38,9 @@ public class Board : MonoBehaviour {
 	private float reinforcementTimer = 0f;
 	public float reinforcement =10f;
 	gameMode gMode = gameMode.infinite;
+    public bool gameover = false;
+    public GameObject gameoverText;
     public Text scoreText;
-
-
-
-	public Sprite Banana;
-	public Sprite Corn;
-	public Sprite Carrot;
 	// to do list
 	// repair the destroy system make shoot
 
@@ -67,7 +63,6 @@ public class Board : MonoBehaviour {
 			spawnLocation.z = spawnLocation.z -1;
 			go.GetComponent<Sphere> ().FillEmpty ();
 			sphereList.Add (go);
-
 			//	Debug.Log (sphereList.Count);
 		}
 
@@ -222,15 +217,19 @@ public class Board : MonoBehaviour {
 	//全スフィアを右に動かす
 	public void fill(){
 		Vector3 tempPos = new Vector3 (0, 0, 0);
-		foreach (GameObject go in sphereList) 
+        currentWallPosition += 1;
+        setWall(currentWallPosition);
+        foreach (GameObject go in sphereList) 
 		{
 			tempPos = go.transform.localPosition;
 			tempPos.x += 1;
 			go.transform.localPosition = tempPos;
 		}
-
-		currentWallPosition += 1;
-		setWall (currentWallPosition);
+        if (currentWallPosition == 10)
+        {
+            gameover = true;
+            gameoverText.SetActive(true);
+        }
 	}
 
 	//全スフィア一覧移動
@@ -367,7 +366,7 @@ public class Board : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//Debug.Log (timer);
-		if (canShoot) {
+		if (canShoot && !gameover) {
 			timer = 0f;
 			if (Input.GetMouseButtonDown (0)) {
 				RaycastHit hit;

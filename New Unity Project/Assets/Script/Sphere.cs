@@ -47,7 +47,7 @@ public class Sphere : MonoBehaviour {
 
 			if (moving) {
 				sameColor.Clear ();
-				if ((other.gameObject.transform.localPosition.z - transform.localPosition.z) <= 0.3 && (other.gameObject.transform.localPosition.z - transform.localPosition.z) >= -0.3) {
+				if ((other.gameObject.transform.localPosition.z - transform.localPosition.z) <= 0.2 && (other.gameObject.transform.localPosition.z - transform.localPosition.z) >= -0.2) {
 					if (other.gameObject.transform.localPosition.x > transform.localPosition.x) {
 						if (DistanceCheck (transform, other.transform)) {
 							moving = false;		
@@ -68,10 +68,11 @@ public class Sphere : MonoBehaviour {
 			
 		}else if(other.tag == "Wall")
 		{
-			if (moving) {
+            if (moving) {
 
 				if (other.gameObject.transform.localPosition.x <= transform.localPosition.x) 
 				{
+                    
 					moving = false;
 					Rounding ();
 				}
@@ -79,7 +80,7 @@ public class Sphere : MonoBehaviour {
 		}
 
 	}
-	private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
 	{
 		if (other.tag == "Sphere") 
 		{
@@ -205,6 +206,12 @@ public class Sphere : MonoBehaviour {
 			destroyCheck = true;
 			DestroyAll ();
 		}
+        if (sphereInfront == null)
+        { moving = true; }
+        if (gameObject.transform.localPosition.x == board.GetComponent<Board>().wall.transform.localPosition.x)
+        {
+            sphereInfront = board.GetComponent<Board>().wall;
+        }
 		if (moving) 
 		{
 			transform.Translate (Vector3.right *( Time.deltaTime * 2));

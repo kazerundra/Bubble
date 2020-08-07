@@ -12,10 +12,7 @@ public class Ball : MonoBehaviour {
 	public Material sMaterial;
 	public float speed = 20.0f;
 	public GameObject img;
-	public Sprite Banana;
-	public Sprite Corn;
-	public Sprite Carrot;
-
+    public Sprite Banana, Chocolate, Corn, Carrot;
 	/// <summary>
 	/// Changes the images. red= carrot, yellow banana, blue corn
 	/// </summary>
@@ -26,7 +23,12 @@ public class Ball : MonoBehaviour {
 			img.GetComponent<SpriteRenderer> ().sprite = Banana;
 		} else if(colors == sphereColors.blue) {
 			img.GetComponent<SpriteRenderer> ().sprite = Corn;
-		} else {
+        } else if (colors == sphereColors.chocolate)
+        {
+            img.GetComponent<SpriteRenderer>().sprite = Chocolate;
+        }
+        else
+        {
 			img.GetComponent<SpriteRenderer> ().sprite = Banana;
 		} 
 
@@ -46,7 +48,7 @@ public class Ball : MonoBehaviour {
 	/// 色をランダムにする
 	/// </summary>
 	public void randomColor(){
-		int random = Random.Range (0, 3);
+		int random = Random.Range (0, 4);
         changeColor(random);
 	}
 
@@ -66,9 +68,14 @@ public class Ball : MonoBehaviour {
             colors = sphereColors.blue;
             sMaterial = GetComponentInParent<Board>().blue;
         }
-        else
+        else if (number == 2)
         {
             colors = sphereColors.yellow;
+            sMaterial = GetComponentInParent<Board>().yellow;
+        }
+        else
+        {
+            colors = sphereColors.chocolate;
             sMaterial = GetComponentInParent<Board>().yellow;
         }
         GetComponent<MeshRenderer>().material = sMaterial;
@@ -98,7 +105,14 @@ public class Ball : MonoBehaviour {
             if (!touch)
             {
                 touch = true;
-                board.TrashScore(false);
+                if (colors != sphereColors.chocolate)
+                {
+                    board.TrashScore(false);
+                }
+                else
+                {
+                    board.TrashScore(true);
+                }
                 Destroy(gameObject);
             }
         }
